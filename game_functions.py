@@ -66,6 +66,9 @@ def start_game(ai_settings, screen, stats, ship, aliens, bullets):
     # Hide the mouse cursor. 
     pygame.mouse.set_visible(False)
 
+    # Reset the game settings.
+    ai_settings.initialize_dynamic_settings()
+
     # Reset the game statistics.
     stats.reset_stats()
     stats.game_active = True
@@ -114,9 +117,10 @@ def check_bullet_alien_collision(ai_settings, screen, ship, bullets, aliens):
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
 
     if len(aliens) == 0:
-        # Destroy existing bullets and create new fleet.
+        # Destroy existing bullets, speed up game, and create new fleet.
         bullets.empty()
         create_fleet(ai_settings, screen, ship, aliens)
+        ai_settings.increase_speed()
 
 def get_number_aliens_x(ai_settings, alien_width):
     """Determine the number of aliens that fit in a row."""
