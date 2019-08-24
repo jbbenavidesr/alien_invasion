@@ -122,8 +122,10 @@ def check_bullet_alien_collision(ai_settings, screen, stats, sb, ship, bullets,
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
 
     if collisions:
-        stats.score += ai_settings.alien_points
-        sb.prep_score()
+        for aliens in collisions.values():
+            stats.score += ai_settings.alien_points * len(aliens)
+            sb.prep_score()
+        check_high_score(stats, sb)
 
     if len(aliens) == 0:
         # Destroy existing bullets, speed up game, and create new fleet.
@@ -226,3 +228,8 @@ def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
     # Look for aliens reaching the bottom of the screen.
     check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets)
 
+def check_high_score(stats, sb):
+    """Check to see if there's a new high score."""
+    if stats.score > stats.high_score:
+        stats.high_score = stats.score
+        sb.prep_high_score()
