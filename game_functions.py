@@ -1,5 +1,6 @@
 import sys
 from time import sleep
+import json
 
 import pygame
 
@@ -16,7 +17,7 @@ def check_keydown_events(event, ai_settings, screen, stats, sb, ship, aliens,
     elif event.key == pygame.K_SPACE:
         fire_bullet(ai_settings, screen, ship, bullets)
     elif event.key == pygame.K_q:
-        sys.exit()
+        quit(stats)
     elif event.key == pygame.K_p and not stats.game_active:
         start_game(ai_settings, screen, stats, sb, ship, aliens, bullets)
 
@@ -39,7 +40,7 @@ def check_events(ai_settings, screen, stats, sb, play_button, ship, aliens,
     """Respond to keypresses and mouse events."""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            sys.exit()
+            quit(stats)
 
         elif event.type == pygame.KEYDOWN:
             check_keydown_events(event, ai_settings, screen, stats, sb, ship, 
@@ -52,6 +53,14 @@ def check_events(ai_settings, screen, stats, sb, play_button, ship, aliens,
             mouse_x, mouse_y = pygame.mouse.get_pos()
             check_play_button(ai_settings, screen, stats, sb, play_button, ship, 
                 aliens, bullets, mouse_x, mouse_y)
+
+def quit(stats):
+    """Stores high score and exit the game."""
+    filename = stats.hs_filename
+    with open(filename, 'w') as f_obj:
+        json.dump(stats.high_score, f_obj)
+    
+    sys.exit()
         
 def check_play_button(ai_settings, screen, stats, sb, play_button, ship, aliens, 
         bullets, mouse_x, mouse_y):
