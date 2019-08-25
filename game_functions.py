@@ -83,10 +83,7 @@ def start_game(ai_settings, screen, stats, sb, ship, aliens, bullets):
     stats.game_active = True
 
     # Reset the scoreboard images.
-    sb.prep_score()
-    sb.prep_high_score()
-    sb.prep_level()
-    sb.prep_ships()
+    sb.prep_images()
 
     # Empty the list of aliens and bullets.
     aliens.empty()
@@ -143,16 +140,18 @@ def check_bullet_alien_collision(ai_settings, screen, stats, sb, ship, bullets,
         check_high_score(stats, sb)
 
     if len(aliens) == 0:
-        # If the entire fleet is destroyed, start a new level.
-        bullets.empty()
-        create_fleet(ai_settings, screen, ship, aliens)
-        ai_settings.increase_speed()
+        start_new_level(ai_settings, screen, stats, sb, ship, aliens, bullets)
 
-        # Increase level.
-        stats.level += 1
-        sb.prep_level()
+def start_new_level(ai_settings, screen, stats, sb, ship, aliens, bullets):
+    """Starts a new level"""
+    # If the entire fleet is destroyed, start a new level.
+    bullets.empty()
+    create_fleet(ai_settings, screen, ship, aliens)
+    ai_settings.increase_speed()
 
-
+    # Increase level.
+    stats.level += 1
+    sb.prep_level()
 
 def get_number_aliens_x(ai_settings, alien_width):
     """Determine the number of aliens that fit in a row."""
@@ -226,7 +225,7 @@ def ship_hit(ai_settings, stats, screen, sb, ship, aliens, bullets):
     else:
         stats.game_active = False
         pygame.mouse.set_visible(True)
-        print("Game Over")
+        print('Game Over')
 
 def check_aliens_bottom(ai_settings, stats, sb, screen, ship, aliens, bullets):
     """Check if any aliens have reached the bottom of the screen."""

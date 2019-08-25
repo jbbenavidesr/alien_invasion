@@ -18,11 +18,15 @@ class Scoreboard():
         self.font = pygame.font.SysFont(None, 38)
 
         # Prepare the initial score images.
+        self.prep_images()
+
+    def prep_images(self):
+        """Gets all the images in the scoreboard ready."""
         self.prep_score()
         self.prep_high_score()
         self.prep_level()
         self.prep_ships()
-    
+
     def prep_score(self):
         """Turn the score into a rendered image."""
         rounded_score = int(round(self.stats.score, -1))
